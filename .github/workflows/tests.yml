@@ -1,0 +1,29 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - README.md
+      - LICENSE
+      - CHANGELOG
+      - .gitignore
+
+jobs:
+  linux:
+    name: Linux
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          key: debian12-1
+          path: |
+            ~/.cache
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Run tests
+        run: ./ci.sh test

@@ -1,0 +1,2 @@
+# SC2128 Expanding an array without an index only gives the first element.
+disable=SC2128
