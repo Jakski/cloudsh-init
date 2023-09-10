@@ -51,7 +51,7 @@ mount_cidata_disk() {
 	disk=$(get_cidata_disk)
 	if [ -z "$disk" ]; then
 		printf "%s\n" "No cidata disks have been found"
-		return 0
+		exit 0
 	fi
 	mount -o ro "$disk" "$TMP_DIR"
 }
