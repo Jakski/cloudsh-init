@@ -24,23 +24,27 @@ get_cidata_disk() {
 	local \
 		vars="" \
 		found=0 \
-		line
+		line \
+		type \
+		label \
+		devname
 	blkid --output export | while read -r line; do
 		if [ "$found" = 1 ]; then
 			continue
 		fi
-		if [ -n "$line" ]; then
-			vars=$(printf "%s\n" "$vars" "$line")
+		if [ -z "$line" ]; then
+			vars=""
 		else
-			eval "$vars"
+			vars=$(printf "%s\n" "$vars" "$line")
+			type=$(eval "$vars"; echo "${TYPE:-}")
+			label=$(eval "$vars"; echo "${LABEL:-}")
+			devname=$(eval "$vars"; echo "${DEVNAME:-}")
 			if \
-				{ [ "${TYPE:-}" = "vfat" ] || [ "${TYPE:-}" = "iso9660" ]; } \
-					&& { [ "${LABEL:-}" = "cidata" ] || [ "${LABEL:-}" = "CIDATA" ]; }
+				{ [ "${type:-}" = "vfat" ] || [ "${type:-}" = "iso9660" ]; } \
+					&& { [ "${label:-}" = "cidata" ] || [ "${label:-}" = "CIDATA" ]; }
 			then
 				found=1
-				printf "%s" "$DEVNAME"
-			else
-				vars=""
+				printf "%s" "$devname"
 			fi
 		fi
 	done
